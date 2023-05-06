@@ -1,1 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Single toggle</title>
+        <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.4/css/all.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-vOhqO5IyZZx/vPDp5Ni5ue5OoCxSE/qahJ79ZMkzy1SsjIhp4tMRy8tJyEFL9j4I4c5PyGJzFZUUkUBb/Ez2jw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+        <script src = "bulb.js"></script>
+        <link rel="stylesheet" type="text/css" href ="bulb.css">
+    </head>
+    <body>
+        <div class="wrapper"> 
+            <a class="icon1">
+                <i class="fas fa-4x fa-tv"></i>
+            </a>
+            <div class="progress">
+                <div><button id="start-btn">Voice</button></div>
+                <div class="toggle-btn" id="unact">
+                    <div class="inner-circle"></div>
+                </div>
+                <div class="toggle-btn active" id="act">
+                    <div class="inner-circle"></div>
+                </div> 
+                
+            </div>
+            <h2>
+            <h2 id="/demo1"></h2>
+            <h2> Dimmer value
+                <h2 id ="/demo2">
+                </h2>
+            </h2>
+            
+        </div>
+        
+        <script>
+            var recognition = new webkitSpeechRecognition();
+            recognition.lang = "en-US";
+            recognition.continuous = true;
+            recognition.interimResults = false;
+            var isRecognitionOn = false;
+
+            recognition.onresult = function(event) {
+                var transcript = event.results[event.results.length-1][0].transcript;
+                if (transcript.includes("turn on the light")) {
+                    $(".toggle-btn").trigger("click");
+                } else if (transcript.includes("turn off the light")) {
+                    $(".toggle-btn").trigger("click");
+                }
+            };
+            recognition.onend = function() {
+                console.log("Speech recognition service disconnected");
+                isRecognitionOn = false;
+            }
+            $("#start-btn").on("click", function() {
+                if(isRecognitionOn) { 
+                    recognition.stop();
+                    console.log("Speech recognition service stopped");
+                    isRecognitionOn = false;
+                } else { 
+                    recognition.start();
+                    console.log("Speech recognition service started");
+                    isRecognitionOn = true;
+                }
+            });
+        </script>
+    </body>
+</html>
